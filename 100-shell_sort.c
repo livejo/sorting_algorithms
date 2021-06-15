@@ -1,34 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sort.h"
 
 /**
- * shell_sort - shell Sort Algrithme using Knuth sequence
- * @array: Array to be Sorted
- * @size:size of the array
- * Return:Sorted Array (void)
+ * shell_sort - sorts an array of integers in ascending order using the
+ * shell sort algorithm and the knuth sequence to create gaps (h = h * 3 + 1)
+ * ...
+ * h = (h-1)/3
+ *
+ * @array: the array to be sorted
+ * @size: the size of the array
+ *
  */
+
 void shell_sort(int *array, size_t size)
 {
-	int n = 1, i, j;
-	int tmp;
+	size_t gap = 1, out, in;
+	int value;
 
-	if (!array || !size || size < 2)
+	if (size < 2)
 		return;
-	while (n < (int)size / 3)
-		n = n * 3 + 1;
-	while (n > 0)
+
+	while (gap < size)
 	{
-		for (i = n; i < (int)size; i++)
+		gap = gap * 3 + 1;
+	}
+	if (gap > size)
+		gap = (gap - 1) / 3;
+
+	while (gap > 0)
+	{
+		for (out = gap; out  < size; out++)
 		{
-			tmp = array[i];
-			j = i;
-			while (j > (n - 1) && array[j - n] >= tmp)
+			value = array[out];
+			for (in = out;
+			     in >= gap - 1 && array[in - gap] >= value;
+			     in -= gap)
 			{
-				array[j] = array[j - n];
-				j -= n;
+				array[in] = array[in - gap];
 			}
-			array[j] = tmp;
+			array[in] = value;
 		}
-		n = n / 3;
+		gap = (gap - 1) / 3;
 		print_array(array, size);
 	}
+
 }
